@@ -2,6 +2,8 @@ import socket
 import sys
 from time import sleep
 
+from picar.config import config 
+
 MAX_SIZE = 1024
 MAX_CONN_TRIES = 2
 CONN_INTERVAL_SLEEP = 2
@@ -22,6 +24,8 @@ def setup(host, port):
         except:
             sleep(CONN_INTERVAL_SLEEP)
             continue
+        print(f'Socket at HOST[{host}], PORT[{port}] is now open')
+
         return sock
     raise ClosedServer(host, port)
 
@@ -29,8 +33,9 @@ def send_data(sock, data):
     sock.sendall(bytes(data + "\n", "utf-8"))
 
 def main():
-    host = 'localhost'
-    port = 5000
+    cfg = config.load_config()
+    host = cfg["SERVER_NAME"]
+    port = cfg["PORT"]
     try: 
         sock = setup(host, port)
     except ClosedServer as err:
