@@ -33,7 +33,7 @@ def send_data(sock, data):
     sock.sendall(bytes(data + "\n", "utf-8"))
 
 def main():
-    cfg = config.load_config()
+    cfg = config.get_config()
     host = cfg["SERVER_NAME"]
     port = cfg["PORT"]
     try: 

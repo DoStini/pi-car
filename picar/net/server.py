@@ -2,8 +2,8 @@ import socketserver
 import socket
 from signal import signal, SIGINT
 
-from picar.config import config 
-
+from picar.config import config
+from picar.controller import handle_data
 
 MAX_SIZE = 1024
 
@@ -17,6 +17,7 @@ class Handler(socketserver.BaseRequestHandler):
     def handle(self):
         self.data = self.request.recv(MAX_SIZE).strip()
         print(self.data)
+        handle_data.toggle()
 
 def setup(host, port):
     server = socketserver.TCPServer((host, port), Handler)
@@ -29,7 +30,7 @@ def setup(host, port):
         exit(1)
 
 def main():
-    cfg = config.load_config()
+    cfg = config.get_config()
     host = get_local_address()
     port = cfg["PORT"]
     print(host, port)
